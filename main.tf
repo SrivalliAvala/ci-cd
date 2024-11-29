@@ -1,18 +1,18 @@
 module "jenkins" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  
-  ami = data.aws_ami.ami_info.id
-  name = "jenkins"
-  user_data = file("jenkins.sh")
 
-  instance_type          = "t3.micro"
-  vpc_security_group_ids = ["sg-0372233cbe1615ef2"]
-  subnet_id              = "subnet-0077a5c7214ba9a8d"
-  tags = merge(
-    {
-        Name = "jenkins"
-    }
-  )
+  name = "jenkins"
+
+  instance_type          = "t3.small"
+  vpc_security_group_ids = ["sg-0372233cbe1615ef2"] #replace your SG
+  subnet_id = "subnet-0dffc81d9d240473b" #replace your Subnet
+  ami = data.aws_ami.ami_info.id
+  user_data = file("jenkins.sh")
+  tags = {
+    Name = "jenkins"
+  }
+
+  # Define the root volume size and type
   root_block_device = [
     {
       volume_size = 50       # Size of the root volume in GB
@@ -20,26 +20,22 @@ module "jenkins" {
       delete_on_termination = true  # Automatically delete the volume when the instance is terminated
     }
   ]
-
 }
 
-
-module "jenkins-agent" {
+module "jenkins_agent" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  
-  ami = data.aws_ami.ami_info.id
+
   name = "jenkins-agent"
-  user_data = file("jenkins-agent.sh")
 
-  instance_type          = "t3.micro"
+  instance_type          = "t3.small"
   vpc_security_group_ids = ["sg-0372233cbe1615ef2"]
-  subnet_id              = "subnet-0077a5c7214ba9a8d"
+  subnet_id = "subnet-0dffc81d9d240473b"
+  ami = data.aws_ami.ami_info.id
+  user_data = file("jenkins-agent.sh")
+  tags = {
+    Name = "jenkins-agent"
+  }
 
-  tags = merge(
-    {
-        Name = "jenkins-agent"
-    }
-  )
   root_block_device = [
     {
       volume_size = 50       # Size of the root volume in GB
@@ -47,7 +43,6 @@ module "jenkins-agent" {
       delete_on_termination = true  # Automatically delete the volume when the instance is terminated
     }
   ]
-
 }
 
 module "records" {
@@ -71,10 +66,10 @@ module "records" {
       type    = "A"
       ttl     = 1
       records = [
-        module.jenkins-agent.public_ip
+        module.jenkins_agent.private_ip
       ]
       allow_overwrite = true
-
     }
   ]
+
 }
