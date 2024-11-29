@@ -11,7 +11,7 @@ module "jenkins" {
 
   tags = merge(
     {
-        Name = jenkins
+        Name = "jenkins"
     }
   )
   root_block_device = [
@@ -29,16 +29,16 @@ module "jenkins-agent" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   
   ami = data.aws_ami.ami_info.id
-  name = "jenkins"
+  name = "jenkins-agent"
   user_data = file("jenkins-agent.sh")
 
   instance_type          = "t3.micro"
   vpc_security_group_ids = ["sg-0372233cbe1615ef2"]
-  subnet_id              = ["subnet-0077a5c7214ba9a8d"]
+  subnet_id              = "subnet-0077a5c7214ba9a8d"
 
   tags = merge(
     {
-        Name = jenkins-agent
+        Name = j"enkins-agent"
     }
   )
   root_block_device = [
