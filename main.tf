@@ -7,8 +7,7 @@ module "jenkins" {
 
   instance_type          = "t3.micro"
   vpc_security_group_ids = ["sg-0372233cbe1615ef2"]
-  subnet_id              = ["subnet-0077a5c7214ba9a8d"]
-
+  subnet_id              = "subnet-0077a5c7214ba9a8d"]
   tags = merge(
     {
         Name = "jenkins"
