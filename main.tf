@@ -38,7 +38,7 @@ module "jenkins-agent" {
 
   tags = merge(
     {
-        Name = j"enkins-agent"
+        Name = "jenkins-agent"
     }
   )
   root_block_device = [
