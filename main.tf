@@ -1,7 +1,7 @@
 module "jenkins" {
   source  = "terraform-aws-modules/ec2-instance/aws"
 
-  name = "jenkins"
+  name = "jenkins1"
 
   instance_type          = "t3.small"
   vpc_security_group_ids = ["sg-0372233cbe1615ef2"] #replace your SG
@@ -9,7 +9,7 @@ module "jenkins" {
   ami = data.aws_ami.ami_info.id
   user_data = file("jenkins.sh")
   tags = {
-    Name = "jenkins"
+    Name = "jenkins1"
   }
 
   # Define the root volume size and type
